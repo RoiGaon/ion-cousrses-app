@@ -1,0 +1,7 @@
+{
+  "name": "ion-courses-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
