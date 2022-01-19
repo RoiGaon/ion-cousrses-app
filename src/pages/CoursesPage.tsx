@@ -20,7 +20,7 @@ import {
   isPlatform,
 } from "@ionic/react";
 import { addOutline } from "ionicons/icons";
-import { CoursesModal } from "../components";
+import { CourseItem, CoursesModal } from "../components";
 import { Course } from "../components/CoursesModal/CoursesModal";
 
 export const COURSE_DATA = [
@@ -94,28 +94,11 @@ const CoursesPage: React.FC = () => {
             {COURSE_DATA.map((course) => (
               <IonRow key={course.id}>
                 <IonCol size-md="6" offset-md="3">
-                  <IonCard>
-                    <IonCardContent className="ion-text-center">
-                      <IonCardTitle>{course.title}</IonCardTitle>
-                      <IonCardSubtitle>
-                        Enrolled on{" "}
-                        {course.enrolled.toLocaleDateString("en-GB", {
-                          year: "numeric",
-                          month: "2-digit",
-                          day: "2-digit",
-                        })}
-                      </IonCardSubtitle>
-                      <div className="ion-text-right">
-                        <IonButton
-                          fill="clear"
-                          color="tertiary"
-                          routerLink={`/courses/${course.id}`}
-                        >
-                          View Details
-                        </IonButton>
-                      </div>
-                    </IonCardContent>
-                  </IonCard>
+                  <CourseItem
+                    id={course.id}
+                    title={course.title}
+                    enrolledDate={course.enrolled}
+                  />
                 </IonCol>
               </IonRow>
             ))}

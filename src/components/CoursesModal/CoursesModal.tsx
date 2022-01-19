@@ -21,7 +21,7 @@ import React from "react";
 export interface Course {
   id: string;
   title: string;
-  enrolled: string;
+  enrolled: Date;
   goals: { id: string; title: string }[];
 }
 
@@ -34,9 +34,11 @@ interface Props {
 const CoursesModal: React.FC<Props> = ({ show, onCancel, editedCourse }) => {
   const [popoverDate2, setPopoverDate2] = React.useState<string | Date>("");
 
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString("en-GB");
-  };
+  const formatDate = (date: Date) => ({
+    shortDate: date.toLocaleDateString("en-GB"),
+    fullDate: date,
+  });
+
   return (
     <IonModal isOpen={show}>
       <IonHeader>
@@ -77,7 +79,9 @@ const CoursesModal: React.FC<Props> = ({ show, onCancel, editedCourse }) => {
                   <IonDatetime
                     presentation="date"
                     onIonChange={(ev) =>
-                      setPopoverDate2(formatDate(new Date(ev.detail.value!)))
+                      setPopoverDate2(
+                        formatDate(new Date(ev.detail.value!)).shortDate
+                      )
                     }
                   />
                 </IonPopover>
