@@ -2,11 +2,6 @@
   --ion-toolbar-background: var(--ion-color-tertiary-shade);
   --ion-toolbar-color: var(--ion-color-warning);
   --ion-tab-bar-background: var(--ion-color-tertiary-shade);
-  --ion-tab-bar-color: var(--ion-color-warning);
-  --ion-tab-bar-color-selected: var(--ion-color-light);
-}
-
-ion-button {
-  --color: var(--ion-color-dark);
-  --background: var(--ion-color-tertiary-shade);
+  --ion-tab-bar-color: var(--ion-color-dark);
+  --ion-tab-bar-color-selected: var(--ion-color-warning);
 }
