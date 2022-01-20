@@ -11,19 +11,21 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-
-import { COURSE_DATA } from "./CoursesPage";
+import { useContextCoursesProvider as useProvider } from "../contextStore/courses-context";
 
 const AllGoalsPage: React.FC = () => {
-  const goals = COURSE_DATA.map((course) =>
-    course.goals.map((goal) => ({ ...goal, courseTitle: course.title }))
-  ).reduce((goalArr, nestedGoalArr) => {
-    let updatedGoalArr = goalArr;
-    for (let goal of nestedGoalArr) {
-      updatedGoalArr = updatedGoalArr.concat(goal);
-    }
-    return updatedGoalArr;
-  }, []);
+  const coursesCtx = useProvider();
+  const goals = coursesCtx.courses
+    .map((course) =>
+      course.goals.map((goal) => ({ ...goal, courseTitle: course.title }))
+    )
+    .reduce((goalArr, nestedGoalArr) => {
+      let updatedGoalArr = goalArr;
+      for (let goal of nestedGoalArr) {
+        updatedGoalArr = updatedGoalArr.concat(goal);
+      }
+      return updatedGoalArr;
+    }, []);
 
   return (
     <IonPage>

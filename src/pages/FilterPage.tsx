@@ -13,9 +13,10 @@ import {
   IonToolbar,
 } from "@ionic/react";
 
-import { COURSE_DATA } from "./CoursesPage";
+import { useContextCoursesProvider as useProvider } from "../contextStore/courses-context";
 
 const FilterPage: React.FC = () => {
+  const coursesCtx = useProvider();
   const courseFilterChangeHandler = (event: CustomEvent) => {
     console.log(event);
   };
@@ -32,7 +33,7 @@ const FilterPage: React.FC = () => {
       </IonHeader>
       <IonContent>
         <IonList>
-          {COURSE_DATA.map((course) => (
+          {coursesCtx.courses.map((course) => (
             <IonItem key={course.id}>
               <IonLabel>{course.title}</IonLabel>
               <IonToggle

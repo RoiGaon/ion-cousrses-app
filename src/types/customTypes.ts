@@ -1,6 +1,6 @@
 export interface Goal {
   id: string;
-  title: string;
+  text: string;
 }
 
 export interface Course {
@@ -12,8 +12,8 @@ export interface Course {
 
 export interface CoursesContextType {
   courses: Course[];
-  addCourse: (course: Course) => void;
-  addGoal: () => void;
-  deleteGoal: () => void;
-  updateGoal: () => void;
+  addCourse: (courseTitle: string, courseDate: Date) => void;
+  addGoal: (courseId: string, goalText: string) => void;
+  deleteGoal: (courseId: string, goalId: string) => void;
+  updateGoal: (courseId: string, goalId: string, newText: string) => void;
 }

@@ -19,26 +19,33 @@ import {
 import { addOutline } from "ionicons/icons";
 
 import { useParams } from "react-router";
-import { COURSE_DATA } from "./CoursesPage";
 import { EditableGoalItem, GoalsModal } from "../components";
+import { useContextCoursesProvider as useProvider } from "../contextStore/courses-context";
 
 const CourseGoalsPage: React.FC = () => {
   const [startedDeleting, setStartedDeleting] = React.useState(false);
   const [toastMessage, setToastMessage] = React.useState("");
   const [isEditing, setIsEditing] = React.useState(false);
   const [selectedGoal, setSelectedGoal] = React.useState<any>();
+  const coursesCtx = useProvider();
   const { courseId } = useParams<{ courseId: string }>();
   const slidingOptionsRef = React.useRef<HTMLIonItemSlidingElement>(null);
+  const selectedGoalIdRef = React.useRef<string | null>(null);
 
-  const selectedCourse = COURSE_DATA.find((course) => course.id === courseId);
+  const selectedCourse = coursesCtx.courses.find(
+    (course) => course.id === courseId
+  );
 
-  const startDeleteItemHandler = () => {
+  const startDeleteItemHandler = (goalId: string) => {
     slidingOptionsRef.current?.closeOpened();
+    setToastMessage("");
     setStartedDeleting(true);
+    selectedGoalIdRef.current = goalId;
   };
 
   const deleteItemHandler = () => {
     setStartedDeleting(false);
+    coursesCtx.deleteGoal(courseId, selectedGoalIdRef.current!);
     setToastMessage("Goal Deleted!");
   };
 
@@ -61,11 +68,21 @@ const CourseGoalsPage: React.FC = () => {
     setSelectedGoal(null);
   };
 
+  const saveGoalHandler = (text: string) => {
+    if (selectedGoal) {
+      coursesCtx.updateGoal(courseId, selectedGoal.id, text);
+    } else {
+      coursesCtx.addGoal(courseId, text);
+    }
+    setIsEditing(false);
+  };
+
   return (
     <>
       <GoalsModal
         show={isEditing}
         onCancel={cancelIsEditGoalHandler}
+        onSave={saveGoalHandler}
         editedGoal={selectedGoal}
       />
       <IonToast
@@ -112,7 +129,7 @@ const CourseGoalsPage: React.FC = () => {
                 <EditableGoalItem
                   key={goal.id}
                   slidingRef={slidingOptionsRef}
-                  onStartDelete={startDeleteItemHandler}
+                  onStartDelete={startDeleteItemHandler.bind(null, goal.id)}
                   onStartEdit={(e) => startEditGoalHandler(e, goal.id)}
                   text={goal.text}
                 />

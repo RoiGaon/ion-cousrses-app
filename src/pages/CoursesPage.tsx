@@ -18,42 +18,14 @@ import {
 import { addOutline } from "ionicons/icons";
 import { CourseItem, CoursesModal } from "../components";
 import { Course } from "types/customTypes";
-
-export const COURSE_DATA = [
-  {
-    id: "c1",
-    title: "Ionic and React - The Parctial Guide",
-    enrolled: new Date("1/18/2022"),
-    goals: [
-      { id: "c1g1", text: "Finish the course!" },
-      { id: "c1g2", text: "Learn a lot!" },
-    ],
-  },
-  {
-    id: "c2",
-    title: "React.js - The Complete Guide",
-    enrolled: new Date("2/29/2021"),
-    goals: [
-      { id: "c2g1", text: "Finish the course!" },
-      { id: "c2g2", text: "Learn a lot!" },
-    ],
-  },
-  {
-    id: "c3",
-    title: "Javascript - The Complete Guide",
-    enrolled: new Date("6/12/2020"),
-    goals: [
-      { id: "c3g1", text: "Finish the course!" },
-      { id: "c3g2", text: "Learn a lot!" },
-    ],
-  },
-];
+import { useContextCoursesProvider as useProvider } from "../contextStore/courses-context";
 
 const CoursesPage: React.FC = () => {
   const [isEditing, setIsEditing] = React.useState(false);
   const [selectedCourse, setSelectedCourse] = React.useState<Course | null>(
     null
   );
+  const coursesCtx = useProvider();
 
   const cancelIsEditGoalHandler = () => {
     setIsEditing(false);
@@ -65,7 +37,10 @@ const CoursesPage: React.FC = () => {
     setSelectedCourse(null);
   };
 
-  const courseAddHandler = (title: string, date: Date) => {};
+  const courseAddHandler = (title: string, date: Date) => {
+    coursesCtx.addCourse(title, date);
+    setIsEditing(false);
+  };
 
   return (
     <>
@@ -90,7 +65,7 @@ const CoursesPage: React.FC = () => {
         </IonHeader>
         <IonContent>
           <IonGrid>
-            {COURSE_DATA.map((course) => (
+            {coursesCtx.courses.map((course) => (
               <IonRow key={course.id}>
                 <IonCol size-md="6" offset-md="3">
                   <CourseItem
