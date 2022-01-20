@@ -2,10 +2,6 @@ import React from "react";
 import {
   IonButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCardSubtitle,
-  IonCardTitle,
   IonCol,
   IonContent,
   IonFab,
@@ -21,7 +17,7 @@ import {
 } from "@ionic/react";
 import { addOutline } from "ionicons/icons";
 import { CourseItem, CoursesModal } from "../components";
-import { Course } from "../components/CoursesModal/CoursesModal";
+import { Course } from "types/customTypes";
 
 export const COURSE_DATA = [
   {
@@ -69,12 +65,15 @@ const CoursesPage: React.FC = () => {
     setSelectedCourse(null);
   };
 
+  const courseAddHandler = (title: string, date: Date) => {};
+
   return (
     <>
       <CoursesModal
         show={isEditing}
         onCancel={cancelIsEditGoalHandler}
         editedCourse={selectedCourse}
+        onSave={courseAddHandler}
       />
       <IonPage>
         <IonHeader>

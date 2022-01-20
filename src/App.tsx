@@ -23,6 +23,7 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import "./theme/theme.css";
 import { SideDrawer } from "./components";
+import { ContextCoursesProvider } from "contextStore/courses-context";
 
 setupIonicReact();
 
@@ -30,11 +31,13 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <SideDrawer />
-      <IonRouterOutlet id="main">
-        <Route exact path="/filter" component={FilterPage} />
-        <Route path="/courses" component={CourseTabsPage} />
-        <Redirect exact path="/" to="courses/list" />
-      </IonRouterOutlet>
+      <ContextCoursesProvider>
+        <IonRouterOutlet id="main">
+          <Route exact path="/filter" component={FilterPage} />
+          <Route path="/courses" component={CourseTabsPage} />
+          <Redirect exact path="/" to="courses/list" />
+        </IonRouterOutlet>
+      </ContextCoursesProvider>
     </IonReactRouter>
   </IonApp>
 );

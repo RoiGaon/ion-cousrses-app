@@ -12,32 +12,51 @@ import {
   IonModal,
   IonPopover,
   IonRow,
+  IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { calendar } from "ionicons/icons";
 import React from "react";
-
-export interface Course {
-  id: string;
-  title: string;
-  enrolled: Date;
-  goals: { id: string; title: string }[];
-}
+import { Course } from "types/customTypes";
 
 interface Props {
   show: boolean;
   onCancel: () => void;
   editedCourse: Course | null;
+  onSave: (title: string, date: Date) => void;
 }
 
-const CoursesModal: React.FC<Props> = ({ show, onCancel, editedCourse }) => {
-  const [popoverDate2, setPopoverDate2] = React.useState<string | Date>("");
+const CoursesModal: React.FC<Props> = ({
+  show,
+  onCancel,
+  editedCourse,
+  onSave,
+}) => {
+  const [popoverDate2, setPopoverDate2] = React.useState<string>("");
+  const [error, setError] = React.useState("");
+  const titleInputRef = React.useRef<HTMLIonInputElement>(null);
 
-  const formatDate = (date: Date) => ({
-    shortDate: date.toLocaleDateString("en-GB"),
-    fullDate: date,
-  });
+  const formatDate = (event: CustomEvent) => {
+    let date = event.detail?.value;
+    setPopoverDate2(date.split("T")[0]);
+  };
+
+  const saveHandler = () => {
+    const enteredTitle = titleInputRef.current!.value;
+
+    if (
+      !enteredTitle ||
+      !popoverDate2 ||
+      enteredTitle.toString().trim().length === 0
+    ) {
+      setError("Please enter a valid title and select a valid date.");
+      return;
+    }
+    setError("");
+
+    onSave(enteredTitle.toString(), new Date(popoverDate2));
+  };
 
   return (
     <IonModal isOpen={show} onDidDismiss={onCancel}>
@@ -52,7 +71,11 @@ const CoursesModal: React.FC<Props> = ({ show, onCancel, editedCourse }) => {
             <IonCol>
               <IonItem>
                 <IonLabel position="floating">Course Title</IonLabel>
-                <IonInput type="text" value={editedCourse?.title} />
+                <IonInput
+                  ref={titleInputRef}
+                  type="text"
+                  value={editedCourse?.title}
+                />
               </IonItem>
             </IonCol>
           </IonRow>
@@ -62,7 +85,7 @@ const CoursesModal: React.FC<Props> = ({ show, onCancel, editedCourse }) => {
                 <IonLabel position="fixed">Date</IonLabel>
                 <IonGrid>
                   <IonRow>
-                    <IonCol size="6" offset="4">
+                    <IonCol size-md="4" offset-md="7" size-xs="6" offset-xs="4">
                       <IonInput
                         id="date-input-2"
                         value={popoverDate2.toString()}
@@ -78,16 +101,21 @@ const CoursesModal: React.FC<Props> = ({ show, onCancel, editedCourse }) => {
                 <IonPopover trigger="open-date-input-2" showBackdrop={false}>
                   <IonDatetime
                     presentation="date"
-                    onIonChange={(ev) =>
-                      setPopoverDate2(
-                        formatDate(new Date(ev.detail.value!)).shortDate
-                      )
-                    }
+                    onIonChange={(e) => formatDate(e)}
                   />
                 </IonPopover>
               </IonItem>
             </IonCol>
           </IonRow>
+          {error && (
+            <IonRow className="ion-text-center">
+              <IonCol>
+                <IonText color="danger">
+                  <p>{error}</p>
+                </IonText>
+              </IonCol>
+            </IonRow>
+          )}
           <IonRow className="ion-text-center">
             <IonCol>
               <IonButton color="dark" fill="clear" onClick={onCancel}>
@@ -95,7 +123,7 @@ const CoursesModal: React.FC<Props> = ({ show, onCancel, editedCourse }) => {
               </IonButton>
             </IonCol>
             <IonCol>
-              <IonButton color="tertiary" expand="block">
+              <IonButton color="tertiary" expand="block" onClick={saveHandler}>
                 <span style={{ color: "gold" }}>Save</span>
               </IonButton>
             </IonCol>
