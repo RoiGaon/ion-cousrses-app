@@ -40,7 +40,7 @@ const CoursesModal: React.FC<Props> = ({ show, onCancel, editedCourse }) => {
   });
 
   return (
-    <IonModal isOpen={show}>
+    <IonModal isOpen={show} onDidDismiss={onCancel}>
       <IonHeader>
         <IonToolbar>
           <IonTitle>{editedCourse ? "Edit" : "Add"} Course</IonTitle>
