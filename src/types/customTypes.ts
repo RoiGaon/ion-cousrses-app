@@ -8,6 +8,7 @@ export interface Course {
   title: string;
   enrolled: Date;
   goals: Goal[];
+  included: boolean;
 }
 
 export interface CoursesContextType {
@@ -16,4 +17,5 @@ export interface CoursesContextType {
   addGoal: (courseId: string, goalText: string) => void;
   deleteGoal: (courseId: string, goalId: string) => void;
   updateGoal: (courseId: string, goalId: string, newText: string) => void;
+  changeCourseFilter: (courseId: string, isIncluded: boolean) => void;
 }

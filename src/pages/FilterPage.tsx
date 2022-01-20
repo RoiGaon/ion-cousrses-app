@@ -18,7 +18,7 @@ import { useContextCoursesProvider as useProvider } from "../contextStore/course
 const FilterPage: React.FC = () => {
   const coursesCtx = useProvider();
   const courseFilterChangeHandler = (event: CustomEvent) => {
-    console.log(event);
+    coursesCtx.changeCourseFilter(event.detail.value, event.detail.checked);
   };
 
   return (
@@ -40,6 +40,7 @@ const FilterPage: React.FC = () => {
                 value={course.id}
                 onIonChange={courseFilterChangeHandler}
                 color="tertiary"
+                checked={course.included}
               ></IonToggle>
             </IonItem>
           ))}

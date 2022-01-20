@@ -7,6 +7,7 @@ const CoursesContext = React.createContext<CoursesContextType>({
   addGoal: () => {},
   deleteGoal: () => {},
   updateGoal: () => {},
+  changeCourseFilter: () => {},
 });
 
 interface Props {
@@ -23,16 +24,17 @@ export const ContextCoursesProvider: React.FC<Props> = ({ children }) => {
         { id: "c1g1", text: "Finish the course!" },
         { id: "c1g2", text: "Learn a lot!" },
       ],
+      included: true,
     },
   ]);
 
   const addCourse = (title: string, date: Date) => {
-    debugger;
     const newCourse: Course = {
       id: Math.random().toString(),
       title,
       enrolled: date,
       goals: [],
+      included: true,
     };
 
     setCourses((prevCourses) => prevCourses.concat(newCourse));
@@ -95,12 +97,28 @@ export const ContextCoursesProvider: React.FC<Props> = ({ children }) => {
     });
   };
 
+  const changeCourseFilter = (courseId: string, isIncluded: boolean) => {
+    setCourses((prevCourses) => {
+      const updatedCourses = [...prevCourses];
+      const updatedCourseIndex = updatedCourses.findIndex(
+        (course) => course.id === courseId
+      );
+      const updatedCourse = {
+        ...updatedCourses[updatedCourseIndex],
+        included: isIncluded,
+      };
+      updatedCourses[updatedCourseIndex] = updatedCourse;
+      return updatedCourses;
+    });
+  };
+
   const courseValue = {
     courses: courses,
     addCourse,
     addGoal,
     deleteGoal,
     updateGoal,
+    changeCourseFilter,
   };
 
   return (

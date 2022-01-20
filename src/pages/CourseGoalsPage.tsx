@@ -89,7 +89,6 @@ const CourseGoalsPage: React.FC = () => {
         isOpen={!!toastMessage}
         message={toastMessage}
         duration={2000}
-        onDidDismiss={() => setToastMessage("")}
       />
       <IonAlert
         isOpen={startedDeleting}
@@ -123,7 +122,7 @@ const CourseGoalsPage: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          {selectedCourse && (
+          {selectedCourse && selectedCourse.goals.length > 0 ? (
             <IonList>
               {selectedCourse.goals.map((goal) => (
                 <EditableGoalItem
@@ -135,6 +134,8 @@ const CourseGoalsPage: React.FC = () => {
                 />
               ))}
             </IonList>
+          ) : (
+            <h2 className="ion-text-center">No Goals Found!</h2>
           )}
           {isPlatform("android") && (
             <IonFab horizontal="end" vertical="bottom" slot="fixed">

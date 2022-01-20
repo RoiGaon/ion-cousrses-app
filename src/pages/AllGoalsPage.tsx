@@ -16,6 +16,7 @@ import { useContextCoursesProvider as useProvider } from "../contextStore/course
 const AllGoalsPage: React.FC = () => {
   const coursesCtx = useProvider();
   const goals = coursesCtx.courses
+    .filter((course) => course.included)
     .map((course) =>
       course.goals.map((goal) => ({ ...goal, courseTitle: course.title }))
     )
@@ -39,14 +40,18 @@ const AllGoalsPage: React.FC = () => {
       </IonHeader>
       <IonContent>
         <IonList>
-          {goals.map((goal) => (
-            <IonItem key={goal.id}>
-              <IonLabel>
-                <h2>{goal.courseTitle}</h2>
-                <p>{goal.text}</p>
-              </IonLabel>
-            </IonItem>
-          ))}
+          {goals.length > 0 ? (
+            goals.map((goal) => (
+              <IonItem key={goal.id}>
+                <IonLabel>
+                  <h2>{goal.courseTitle}</h2>
+                  <p>{goal.text}</p>
+                </IonLabel>
+              </IonItem>
+            ))
+          ) : (
+            <h2 className="ion-text-center">No Goals Found!</h2>
+          )}
         </IonList>
       </IonContent>
     </IonPage>
